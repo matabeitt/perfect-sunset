@@ -6,7 +6,7 @@ class LocationForm extends React.Component {
 		return (
 			<div>
 				<form className="text-center my-3"
-				onSubmit={this.props.getWeather}>
+				onSubmit={this.props.callback}>
 					<h3 className="text-dark">Enter your location</h3>
 					<div className="form-group">
 						<input className="form-control" type="text" name="locale" placeholder="City/Town"/>

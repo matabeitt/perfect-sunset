@@ -1,9 +1,22 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import App from './App';
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
-  ReactDOM.unmountComponentAtNode(div);
+import {shallow} from 'enzyme';
+
+describe('<Index> renders without crashing:', () => {
+	let wrapper;
+
+	beforeEach(() => {wrapper = shallow(<App/>)});
+
+	it('should be defined', () => {
+		expect(wrapper).toBeDefined();
+	});
+
+	it('should contain a form', () => {
+		expect(wrapper).toBeFalsy();
+	});
+
+	it('should contain a view', () => {
+		expect(wrapper).toBeFalsy();
+	});
 });
