@@ -6,16 +6,29 @@ import './assets/styles/main.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import App from './App';
-import Firebase from './component/Firebase/firebase';
-import { FirebaseContext } from './component/Firebase/context';
+import Firebase from './utils/Firebase/firebase';
+import { FirebaseContext } from './utils/Firebase/context';
 
 import * as serviceWorker from './serviceWorker';
 
+/**
+ * Initialise dotenv configuration for the 
+ * project. This will allow access to 
+ * .env environment variables.
+ */
 require('dotenv').config();
 
+/**
+ * Entry point fr the application, provides Firebase 
+ * access to encapsulated components.
+ * 
+ * N.B. 
+ * 	Components must be wrapped as 
+ * 	FirebaseContext.Consumer components. 
+ */
 ReactDOM.render(
 	<FirebaseContext.Provider value={new Firebase()}>
-    	<App />
+    	<App/>
   	</FirebaseContext.Provider>,
 	document.getElementById('root')
 );

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {getLocationCoordinates} from './GoogleMaps';
 
 import {defaultContext} from '../mocks/WeatherData';
 
@@ -11,7 +12,10 @@ import {defaultContext} from '../mocks/WeatherData';
 export const getWeatherFor = async (locale, country) => {
     const uri = process.env.REACT_APP_WEATHER_URL + locale + ',' + country + process.env.REACT_APP_WEATHER_API_KEY;
     return axios.get(uri)
-        .then(res => (res.data))
+        .then(res => {
+            console.log(res);
+            return res.data
+        })
         .catch(err => (err.response));
 }
 
@@ -54,4 +58,15 @@ export const getWeatherIndex = (data) => {
     const beaufort = Math.pow(((data.wind) / 0.836), 2/3);
     const clouds = Math.abs((data.clouds - 50) / 10);
     return 0;
+}
+
+/**
+ * Returns the longitude and latitude for the 
+ * supplied address using the Googe Maps 
+ * Geocoding API.
+ * @param {String} locale
+ * @param {String} country 
+ */
+export const getLocation = async (locale, country) => {
+    return await getLocationCoordinates(locale, country);
 }

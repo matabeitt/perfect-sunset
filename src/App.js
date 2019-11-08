@@ -4,7 +4,7 @@ import LocationForm from "./component/LocationForm";
 import WeatherView from "./component/WeatherView";
 // import ErrorView from "./component/ErrorView";
 import Clock from "./component/Clock";
-import { wrapperFirebase } from './component/Firebase/context';
+import { wrapperFirebase } from './utils/Firebase/context';
 // import * as secret from './secret';
 
 // Refactored components...
@@ -19,7 +19,9 @@ import SunsetView from "./component/SunsetView";
 import { getWeatherFor, 
 	parseWeatherData,
 	getWeatherContext,
- } from './utils/OpenWeatherHandler';
+	getLocation,
+ } from './utils';
+import { getWeatherData } from "./utils/DarkSky";
 
 const weather = {
 	bad: require('./assets/media/sunset_bad.jpg'),
@@ -89,8 +91,14 @@ class App extends React.Component {
 		const country = evt.target.elements.country.value;
 
 		if (locale && country) {
+			const {address, location} = await getLocation(locale, country);
+			
+			await getWeatherData(location);
+
 			let [ntime, data] = parseWeatherData(await getWeatherFor(locale, country));
 			
+			// ONE FUNCTION TO GET THEM ALL?
+
 			data = {
 				data: {
 					...data,
