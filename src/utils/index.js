@@ -1,7 +1,20 @@
 import axios from 'axios';
+import {queryWeatherAPI} from './DarkSky';
 import {getLocationCoordinates} from './GoogleMaps';
 
-import {defaultContext} from '../mocks/WeatherData';
+import {defaultContext, testData, testContext} from '../mocks/WeatherData';
+
+/**
+ * Returns the time and weather data for the given 
+ * locale and country combination by calling the 
+ * API request function.
+ * @param {String} locale 
+ * @param {String} country
+ * @returns {[String, Object]}
+ */
+export const fetchWeatherDataFromAPI = async (locale, country) => {
+    return await parseWeatherData(await getWeatherFor(locale, country));
+}
 
 /**
  * Returns the Open Weather API response to the 
@@ -69,4 +82,9 @@ export const getWeatherIndex = (data) => {
  */
 export const getLocation = async (locale, country) => {
     return await getLocationCoordinates(locale, country);
+}
+
+export const computeWeatherContext = (time, weather) => {
+    if (time === null || weather === null) return testContext;
+    else return testContext;
 }

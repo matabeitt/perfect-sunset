@@ -3,7 +3,7 @@ import App from './App';
 
 import {shallow} from 'enzyme';
 
-describe('<Index> renders without crashing:', () => {
+describe('<Index/> renders without crashing:', () => {
 	let wrapper;
 
 	beforeEach(() => {wrapper = shallow(<App/>)});
@@ -20,3 +20,9 @@ describe('<Index> renders without crashing:', () => {
 		expect(wrapper).toBeFalsy();
 	});
 });
+
+describe('<Index/> interacts appropriately', () => {
+	let wrapper;
+
+	beforeEach(() => {wrapper = shallow(<App/>)});
+})

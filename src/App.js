@@ -1,14 +1,12 @@
 import React from "react";
 // import Title from "./component/Title";
 import LocationForm from "./component/LocationForm";
-import WeatherView from "./component/WeatherView";
 // import ErrorView from "./component/ErrorView";
 import Clock from "./component/Clock";
 import { wrapperFirebase } from './utils/Firebase/context';
 // import * as secret from './secret';
 
 // Refactored components...
-import Notification from "./component/Notification";
 import WeatherChart from "./component/WeatherChart";
 import SunsetView from "./component/SunsetView";
 
@@ -16,12 +14,14 @@ import SunsetView from "./component/SunsetView";
 // import { testData } from './mocks/WeatherData';
 
 // Utiltiy functions
-import { getWeatherFor, 
+import {
+	getWeatherFor,
 	parseWeatherData,
 	getWeatherContext,
 	getLocation,
- } from './utils';
-import { getWeatherData } from "./utils/DarkSky";
+	fetchWeatherDataFromAPI,
+	computeWeatherContext,
+} from './utils';
 
 const weather = {
 	bad: require('./assets/media/sunset_bad.jpg'),
@@ -87,30 +87,35 @@ class App extends React.Component {
 
 	fetchWeather = async (evt) => {
 		evt.preventDefault();
+
+		let newContext = {};
+		let newData = {};
+
 		const locale = evt.target.elements.locale.value;
 		const country = evt.target.elements.country.value;
 
 		if (locale && country) {
-			const {address, location} = await getLocation(locale, country);
-			
-			await getWeatherData(location);
+			// Error correct the address and location points.
+			const { address, location } = await getLocation(locale, country);
+			// Fetch the time of sunset and weather for query.
+			const { time, weather } = await fetchWeatherDataFromAPI(locale, country);
+			// Compute the quality information for weather data.
+			const { title, desc, rating} = computeWeatherContext(time, weather);
 
-			let [ntime, data] = parseWeatherData(await getWeatherFor(locale, country));
-			
-			// ONE FUNCTION TO GET THEM ALL?
+			// Set the new Context to be set in state. (Context)
+			newContext['time'] = time;
+			newContext['title'] = title;
+			newContext['description'] = desc;
+			newContext['rating'] = rating
 
-			data = {
-				data: {
-					...data,
-					time: new Date(ntime * 1000).toLocaleTimeString([], { hour12: true }),
-				}
-			};
+			// Set the new Data to be set in the state. (Chart)
+			newData['weather'] = weather;
 
-			let context = getWeatherContext(data);
+			let context = getWeatherContext();
 
 			this.setState({
-				sunsetData: data,
-				sunsetContext: context,
+				sunsetData: newData,
+				sunsetContext: newContext,
 			});
 		}
 	}

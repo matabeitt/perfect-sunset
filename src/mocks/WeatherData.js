@@ -24,6 +24,13 @@ export const testData = ({
     }
 });
 
+export const testContext = ({
+    time: new Date().toLocaleTimeString([], {timeStyle: 'short'}),
+    title: 'Okay',
+    description: 'Light rain expected in a few hours.',
+    rating: 5
+})
+
 /**
  * This is the sample data used for the 
  * SunsetView context component to diplay the
